@@ -39,7 +39,7 @@ Tám frame lướt:
 | Vật | Frame, idx | Class | Mũi tên yaw đúng hướng? | Đáy chạm đường? | Đã kiểm Top/Side/Front + ảnh? | Kích thước trong bảng 4.3? |
 |---|---|---|---|---|---|---|
 | (a) xe con gần | s01f04, 2 | Car | Có: xe cùng chiều, mũi tên chỉ đầu xe, `yaw_deg` 271,0° | Có: z đáy −1,73 m, `ground_gap_m` 0,00 | Có: Top, Side, Front và cam01, cam03 | l 4,60 / w 2,22 / h 1,69 m: dài, cao hợp SUV; rộng hơn 2,10 m |
-| (b) xe buýt hoặc xe tải | s01f04, 5 | Truck | TODO(học viên): xem câu hỏi về hướng xe tải | Có: z đáy −1,90 m, `ground_gap_m` 0,10 | Có: Top, Side, Front và cam01, cam03, cam05 | l 6,17 / w 2,73 / h 3,00 m: rộng hơn 2,60 m |
+| (b) xe buýt hoặc xe tải | s01f04, 5 | Truck | Có: xe đi ngược chiều, mũi tên chỉ đầu xe, `yaw_deg` 88,9° | Có: z đáy −1,90 m, `ground_gap_m` 0,10 | Có: Top, Side, Front và cam01, cam03, cam05 | l 6,17 / w 2,73 / h 3,00 m: rộng hơn 2,60 m |
 | (c) người đi bộ hoặc xe hai bánh | s02f05, 5 | Cyclist | Có: mũi tên chỉ hướng đi, `yaw_deg` 275,9° (đã sửa sau `selfcheck`) | Có: z đáy −1,55 m, `ground_gap_m` 0,21 | Đã sửa hướng, kích thước và đáy ở Top/Side | l 1,96 / w 0,88 / h 1,62 m: trong khoảng xe máy có người |
 
 Vòng hiệu chuẩn: em không tham gia vòng hiệu chuẩn trên task chung, nên không có số để so với các bạn.
@@ -55,7 +55,7 @@ Nguyên nhân ghi là **giả thuyết**.
 |---|---|---|---|---|
 | 1. Bóng che | s02f00 / `t4-1-bong-che` / task chung D13-HC485087 | Thân xe buýt chắn tia LiDAR, nên vùng phía sau nó không có tia nào tới | Xe buýt đỏ sát bên trái, khoảng 4 m; phía sau xe buýt gần như không có điểm, hai bên vùng khuất vẫn dày điểm | Vùng trống là chưa quan sát được, không coi là đường trống; vật sau xe buýt không đủ điểm thì không đoán |
 | 2. Thưa ở xa | s03f32 / `t4-2-thua-o-xa` / task của em | Càng xa, các tia LiDAR càng tỏa rộng nên ít tia trúng vật | Bus idx 2 ở 28,2 m có 385 điểm, chỉ vài đường quét rời ở mặt sau và hông; Car idx 1 ở 7,9 m có 2287 điểm | Thấy khoảng 15–20% thể tích thì vẽ, dựa camera và bảng 4.3 cho kích thước; ít hơn thì bỏ qua và ghi lại |
-| 3. Phản xạ thấp / ít điểm bất thường | TODO(học viên): frame nào / `t4-3-phan-xa-thap` / nguồn | Sơn đen hấp thụ phần lớn tia laser; xe sát bên hông nên tia tới rất xiên, phản xạ lệch ra ngoài | SUV đen ở làn phải, sát bên xe thu dữ liệu: khối điểm thưa, intensity yếu hơn hẳn các xe sáng màu phía trước | Vẫn vẽ theo cụm điểm có được cộng ảnh camera; không nới hộp theo intensity |
+| 3. Phản xạ thấp / ít điểm bất thường | s04f02 / `t4-3-phan-xa-thap` / task chung D13-HC485087 | Sơn đen hấp thụ phần lớn tia laser; xe sát bên hông nên tia tới rất xiên, phản xạ lệch ra ngoài | SUV đen ở làn phải, sát bên xe thu dữ liệu: khối điểm thưa, intensity yếu hơn hẳn các xe sáng màu phía trước | Vẫn vẽ theo cụm điểm có được cộng ảnh camera; không nới hộp theo intensity |
 | 4. Điểm lạ | s02f35 / `t4-4-diem-la` / task chung D13-HC485087 | Phản xạ đa đường: tia dội qua bề mặt bóng (dải phân cách kim loại, kính, mặt đường ướt) rồi mới về cảm biến, nên quãng đường đo dài hơn thật | Cụm khoảng 46 điểm phía sau bên trái, cách khoảng 29 m, ở z ≈ −13,5 m, thấp hơn mặt đường quanh đó (z ≈ −2,5 m) khoảng 11 m | Không gán thành vật |
 
 ## 5. Số từ cuboid của em (Bước 5)
@@ -87,9 +87,9 @@ Các cuboid đã sửa sau `selfcheck`:
 - s02f05 idx 5 (Cyclist): `selfcheck` báo `length` < `width` (yaw không dọc thân xe). Em xoay mũi tên dọc thân xe về hướng đi, đổi kích thước từ 0,86 × 1,45 m thành 1,96 × 0,88 m và hạ đáy; khoảng hở với mặt đường giảm từ 0,34 m xuống 0,21 m, hết cờ.
 - s01f04 idx 1 và idx 8 (Car): giảm `width` từ 2,38 m và 2,42 m xuống 2,30 m.
 
-Cảnh báo giữ nguyên: TODO(học viên) lý do giữ các cờ `width` > 2,3 m của Car còn lại và s04f08 idx 7 (chìm 0,41 m).
+Cảnh báo giữ nguyên: các cờ `width` > 2,3 m của Car còn lại và s04f08 idx 7 (chìm 0,41 m) em chưa kịp xem lại, nên chưa khẳng định được hộp đúng hay sai.
 
-Đổi kiểm với 2A202603248: TODO(học viên) hai con số đã đối chiếu với bảng A. Kết quả chung là khớp, không lệch nhiều; có lệch ở các frame s03f32, s04f08, s04f36.
+Đổi kiểm với 2A202603248: đối chiếu Bus ở s03f32 (idx 2 trong bảng A của em). Rộng: em 3,90 m, bạn 4,0 m; cao: em 4,10 m, bạn 4,1 m. Hai số khớp, chỉ lệch khoảng 0,1 m ở chiều rộng, nên em không sửa. Cả hai đều rộng hơn khoảng 2,50–2,60 m của bảng 4.3 (`selfcheck` cũng cờ chiều rộng hộp này), đây là điểm cần xem lại. Ngoài ra hai bên có lệch ở các frame s03f32, s04f08, s04f36.
 
 ## 6. Ý nghĩa của nhãn, cách dùng AI và điều còn chưa chắc
 (a) Model học trên nhãn này phải ước lượng kích thước và khoảng cách thật để xe tự hành tính quỹ đạo và khoảng cách phanh; đo bằng mét thì một xe dài 4,5 m vẫn là 4,5 m dù cách 5 m hay 50 m, còn pixel thì to nhỏ theo phối cảnh. Vật thưa điểm chỉ lộ một mặt nên mỗi người dễ đoán kích thước và hướng một kiểu; cần quy tắc riêng (ngưỡng thể tích thấy được, bảng kích thước tham chiếu, đối chiếu camera, bỏ qua khi không đủ cơ sở) để nhãn nhất quán và model không học từ nhãn đoán bừa.
